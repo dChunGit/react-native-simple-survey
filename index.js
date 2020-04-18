@@ -371,7 +371,7 @@ export class SimpleSurvey extends Component {
         }
 
         return (<View style={containerStyle}>
-            {this.props.renderNumberSpinner ?
+            {this.props.renderQuestionText ?
                 this.props.renderQuestionText(questionText) : null}
             {renderQuestionSpinner((value) =>
                 this.updateAnswer({
@@ -443,3 +443,4 @@ export class SimpleSurvey extends Component {
         }
     }
 }
+
