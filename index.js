@@ -358,6 +358,35 @@ export class SimpleSurvey extends Component {
         );
     }
 
+    renderSpinner() {
+        const { survey, renderQuestionSpinner, containerStyle } = this.props;
+        const currentQuestionIndex = this.state.currentQuestionIndex;
+        const answers = this.state.answers;
+        const { questionText, questionId, placeholderText = null, defaultValue } = survey[currentQuestionIndex];
+        if (answers[currentQuestionIndex] === undefined && defaultValue) {
+            setTimeout(() => this.updateAnswer({
+                questionId: survey[currentQuestionIndex].questionId,
+                value: defaultValue
+                }), 0);
+        }
+
+        return (<View style={containerStyle}>
+            {this.props.renderNumberSpinner ?
+                this.props.renderQuestionText(questionText) : null}
+            {renderQuestionSpinner((value) =>
+                this.updateAnswer({
+                    questionId,
+                    value
+                }),
+                answers[currentQuestionIndex] === undefined ? undefined : answers[currentQuestionIndex].value,
+                placeholderText,
+                this.props.autoAdvance ? this.autoAdvance.bind(this) : null
+            )}
+            {this.renderNavButtons()}
+        </View>
+        );
+    }
+
     renderTextInputElement() {
         const { survey, renderTextInput, containerStyle } = this.props;
         const currentQuestionIndex = this.state.currentQuestionIndex;
@@ -409,6 +438,7 @@ export class SimpleSurvey extends Component {
             case 'TextInput': return this.renderTextInputElement();
             case 'NumericInput': return this.renderNumeric();
             case 'Info': return this.renderInfo();
+            case 'Spinner': return this.renderSpinner();
             default: return <View />;
         }
     }
